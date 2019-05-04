@@ -59,6 +59,9 @@ app.post('/api/notes', function(req, res) {
   });
 });
 
+
+
+
 app.get('*', function(req, res) {
   res.send('<h1>💁‍♀️ 404 Error!</h1>');
 });

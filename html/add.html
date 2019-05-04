@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <title>Add A Notes</title>
+</head>
+
+<body>
+  <nav style="background-color: #18BC9c;" class="navbar navbar-dark">
+    <a class="navbar-brand" href="/">📝</a>
+  </nav>
+  
+  <div class="container">
+    
+    <div class="card mb-5">
+      <h4 class="card-header">Note Taker</h4>
+      <div class="card-body">
+        <form id="note-form">
+          <div class="form-group">
+            <label for="title-input" placeholder="Note Title">Title </label>
+            <input type="text" id="title-input" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="note-input" placeholder="Note Text">Note</label>
+            <input type="text" id="note-input" class="form-control" />
+          </div>
+          <button type="submit" class="btn btn-block btn-outline-success">Add Note</button>
+        </form>
+      </div>
+      <ul id="dispNotes" class="list-group">
+        
+      </ul>
+     
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      // add event listener for form submission
+      $("#note-form").on("submit", function (event) {
+        event.preventDefault();
+
+        // package up data in input tags
+        const noteTakerData = {
+          title: $("#title-input").val().trim(),
+          note: $("#note-input").val().trim(),
+
+        }
+        console.log(noteTakerData);
+        // check if any of these inputs are empty and return false if they are
+        if (!noteTakerData.title || !noteTakerData.note) {
+          return false;
+        }
+
+        // POST data using ajax
+        $.ajax({
+            url: "/api/notes",
+            method: "POST",
+            data: noteTakerData // this is req.body
+          })
+          .then(function (apiResponse) {
+            location.reload();
+            
+          });
+
+      });
+      $.ajax({
+          url: "/api/notes",
+          method: "GET"
+        })
+        .then(function (notesData) {
+          // console.log(notesData);
+          var showNote = $("#dispNotes");
+          for (var i = 0; i < notesData.length; i++) {
+          
+            var noteArr = $("<li class='list-group-item list-group-item-warning'>" + notesData[i].title + " || " + notesData[i].note + " || " + 
+              "<i data-id = '" + notesData[i].id + "' class='fas fa-trash-alt fa-lg remove'></i> </li> ");
+            showNote.append(noteArr);
+
+          }
+        });
+      // function remove the data-id
+      var noteDelete = function (event) {
+        
+        event.stopPropagation();
+
+        var removeNote = ($(this).attr("data-id"));
+        console.log(removeNote);
+
+        $.ajax({
+          url: "/api/notes/" + removeNote,
+          method: "DELETE"
+        }).then(function() {
+          location.reload();
+        });
+        
+
+      };
+      $(document).on("click", ".remove", noteDelete);
+
+
+
+    })
+  </script>
+
+</body>
+
+</html>
+

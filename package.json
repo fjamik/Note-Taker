@@ -1,0 +1,26 @@
+{
+  "name": "Note-Taker",
+  "version": "1.0.0",
+  "description": "In this activity users are able to use a note-taking application to create, read, and delete notes from a MySQL database.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fjamik/Note-Taker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fjamik/Note-Taker/issues"
+  },
+  "homepage": "https://github.com/fjamik/Note-Taker#readme",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "express": "^4.16.4",
+    "mysql": "^2.17.1"
+  }
+}
